@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">IVMS Mex</string>
+    <string name="Username">Usuario</string>
+    <string name="Password">Contraseña</string>
+    <string name="RememberPasswd">Recordar Contraseña</string>
+    <string name="IniciaSesion">Iniciar Sesión</string>
 </resources>
