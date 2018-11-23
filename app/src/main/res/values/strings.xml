@@ -4,4 +4,5 @@
     <string name="Password">Contraseña</string>
     <string name="RememberPasswd">Recordar Contraseña</string>
     <string name="IniciaSesion">Iniciar Sesión</string>
+    <string name="Register">Pre registro</string>
 </resources>

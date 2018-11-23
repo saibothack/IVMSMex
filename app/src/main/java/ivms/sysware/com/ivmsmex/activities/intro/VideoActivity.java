@@ -2,6 +2,7 @@ package ivms.sysware.com.ivmsmex.activities.intro;
 
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.VideoView;
@@ -10,6 +11,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ivms.sysware.com.ivmsmex.R;
 import ivms.sysware.com.ivmsmex.activities.BaseActivity;
+import ivms.sysware.com.ivmsmex.activities.login.LoginActivity;
 import ivms.sysware.com.ivmsmex.activities.rastreo.RastreoActivity;
 
 public class VideoActivity extends BaseActivity {
@@ -23,6 +25,12 @@ public class VideoActivity extends BaseActivity {
         setContentView(R.layout.activity_video);
         ButterKnife.bind(this);
         setVideo();
+
+        new Handler().postDelayed(new Runnable(){
+            public void run(){
+                redirect(LoginActivity.class);
+            }
+        }, 5000);
     }
 
     private void setVideo() {
