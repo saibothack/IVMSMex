@@ -8,7 +8,7 @@ import android.support.annotation.NonNull;
 import android.widget.TextView;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+//import butterknife.InjectView;
 import ivms.sysware.com.ivmsmex.R;
 import ivms.sysware.com.ivmsmex.activities.BaseActivity;
 import ivms.sysware.com.ivmsmex.services.location.FallbackLocationTracker;
@@ -17,7 +17,7 @@ import ivms.sysware.com.ivmsmex.services.location.LocationTracker;
 public class RastreoActivity extends BaseActivity {
 
 
-    @InjectView(R.id.txt_debugRastreo)
+    //@InjectView(R.id.txt_debugRastreo)
     TextView txt_debugRastreo;
 
     int lineas=0;
@@ -26,7 +26,7 @@ public class RastreoActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rastreo);
-        ButterKnife.inject(this);
+        //ButterKnife.inject(this);
         //redirect();
         initComponents();
         initEvents();
