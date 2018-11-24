@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 
 import ivms.sysware.com.ivmsmex.R;
+import ivms.sysware.com.ivmsmex.utils.MyApplication;
 import ivms.sysware.com.ivmsmex.utils.enums;
 
 public class BaseActivity extends AppCompatActivity {
@@ -20,6 +21,10 @@ public class BaseActivity extends AppCompatActivity {
 
     public void initEvents(){
 
+    }
+
+    public MyApplication getMyApplication() {
+        return (MyApplication) getApplication();
     }
 
     @Override
@@ -61,6 +66,7 @@ public class BaseActivity extends AppCompatActivity {
         }else{
             builder.setIcon(R.mipmap.info);
         }
+
         //"Aceptar"
         builder.setPositiveButton(labelAceptar, new DialogInterface.OnClickListener() {
             @Override
@@ -73,6 +79,7 @@ public class BaseActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
+
         Boolean mostrarBotonCancelar=muestraBotonCancelar;
 
         if (mostrarBotonCancelar) {
@@ -97,6 +104,13 @@ public class BaseActivity extends AppCompatActivity {
         Intent i = new Intent(this, clazz);
         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i);
+    }
+
+    public void redirect(final Class clazz, boolean finish) {
+        Intent i = new Intent(this, clazz);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(i);
+        finish();
     }
 
 }
