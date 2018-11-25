@@ -14,7 +14,7 @@ public class Vehicle {
 
     private  String TypeVehicle;
 
-    private  String Area;       
+    private  String Area;
 
     private  String Location;
 
