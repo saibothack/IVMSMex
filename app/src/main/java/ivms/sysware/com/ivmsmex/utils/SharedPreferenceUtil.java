@@ -29,7 +29,8 @@ public class SharedPreferenceUtil {
         idUser,
         idVehicle,
         nameUser,
-        platesVehicle
+        platesVehicle,
+        bLogin
     }
 
     //PUT

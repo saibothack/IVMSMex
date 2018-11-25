@@ -1,110 +1,130 @@
 package ivms.sysware.com.ivmsmex.fragments.editProfiler;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
 import ivms.sysware.com.ivmsmex.R;
+import ivms.sysware.com.ivmsmex.activities.navigation.NavigationActivity;
+import ivms.sysware.com.ivmsmex.database.user.UserHandler;
+import ivms.sysware.com.ivmsmex.fragments.profiler.ProfilerFragment;
+import ivms.sysware.com.ivmsmex.utils.SharedPreferenceUtil;
+import ivms.sysware.com.ivmsmex.utils.Validations;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link EditProfilerFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link EditProfilerFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class EditProfilerFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private SharedPreferenceUtil sharedPreferences;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    NavigationActivity navigationActivity;
 
-    private OnFragmentInteractionListener mListener;
+    Button btnEdit;
+    Button btnBack;
+
+    EditText txtName;
+    EditText txtEmail;
+    EditText txtPhone;
+    EditText txtEmployeeNumber;
 
     public EditProfilerFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment EditProfilerFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static EditProfilerFragment newInstance(String param1, String param2) {
-        EditProfilerFragment fragment = new EditProfilerFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_edit_profiler, container, false);
+        View frame = inflater.inflate(R.layout.fragment_edit_profiler, container, false);
+        initComponents(frame);
+        return  frame;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+    private void initComponents(View frm) {
+        navigationActivity = (NavigationActivity) getActivity();
+        sharedPreferences = navigationActivity.sharedPreferences;
+
+        txtName = frm.findViewById(R.id.txtName);
+        txtEmail = frm.findViewById(R.id.txtEmail);
+        txtPhone = frm.findViewById(R.id.txtPhone);
+        txtEmployeeNumber = frm.findViewById(R.id.txtEmployeeNumber);
+
+        txtName.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+        txtEmail.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+        txtPhone.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+        txtEmployeeNumber.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+
+
+        btnEdit = frm.findViewById(R.id.btnEdit);
+        btnEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (validate()) {
+                    UserHandler.saveUserEdit(txtName.getText().toString(), txtEmail.getText().toString(),
+                            txtPhone.getText().toString(), txtEmployeeNumber.getText().toString(), sharedPreferences,
+                            sharedPreferences.getInt(SharedPreferenceUtil.Key.idUser));
+                }
+
+            }
+        });
+
+        btnBack = frm.findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigationActivity.setFrame(ProfilerFragment.class, R.string.profiler);
+            }
+        });
+
+        UserHandler.initComponents(txtName, txtEmail, txtPhone, txtEmployeeNumber,
+                sharedPreferences.getInt(SharedPreferenceUtil.Key.idUser));
+
+    }
+
+    private boolean validate() {
+        boolean success = true;
+
+        if (txtName.getText().toString().isEmpty()) {
+            txtName.setError("Por favor ingrese su nombre.");
+            success = false;
         }
-    }
 
-    /*@Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (txtEmail.getText().toString().isEmpty()) {
+            txtEmail.setError("Por favor ingrese su correo.");
+            success = false;
         } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+            if (!Validations.formatEmailValid(txtEmail.getText().toString())) {
+                txtEmail.setError("Por favor un correo valido.");
+                success = false;
+            }
         }
-    }*/
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
+        if (txtPhone.getText().toString().isEmpty()) {
+            txtPhone.setError("Por favor ingrese su teléfono.");
+            success = false;
+        } else {
+            if (!Validations.formatPhoneValid(txtPhone.getText().toString())) {
+                txtEmail.setError("Por favor ingrese un teléfono valido.");
+                success = false;
+            }
+        }
+
+        if (txtEmployeeNumber.getText().toString().isEmpty()) {
+            txtEmployeeNumber.setError("Por favor ingrese su número de empleado.");
+            success = false;
+        }
+
+        return success;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
 }

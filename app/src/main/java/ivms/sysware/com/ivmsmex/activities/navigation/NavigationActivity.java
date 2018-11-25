@@ -11,34 +11,68 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import ivms.sysware.com.ivmsmex.R;
+import ivms.sysware.com.ivmsmex.activities.BaseActivity;
+import ivms.sysware.com.ivmsmex.activities.intro.VideoActivity;
 import ivms.sysware.com.ivmsmex.fragments.reports.ReportFragment;
 import ivms.sysware.com.ivmsmex.fragments.suggestions.SuggestionFragment;
 import ivms.sysware.com.ivmsmex.fragments.tracking.TrackingFragment;
 import ivms.sysware.com.ivmsmex.fragments.profiler.ProfilerFragment;
 import ivms.sysware.com.ivmsmex.fragments.vehicle.VehicleFragment;
+import ivms.sysware.com.ivmsmex.utils.SharedPreferenceUtil;
 
-public class NavigationActivity extends AppCompatActivity
+public class NavigationActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    public SharedPreferenceUtil sharedPreferences;
+
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
+    @BindView(R.id.drawer_layout)
+    DrawerLayout drawer;
+
+    @BindView(R.id.nav_view)
+    NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.app_name);
+        ButterKnife.bind(this);
+        initComponents();
+    }
 
+    @Override
+    public void initComponents() {
+        sharedPreferences = getMyApplication().getSharedPreferenceUtil();
+        showToolbar();
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        navigationView.getMenu().getItem(0).setChecked(true);
+        setFrame(TrackingFragment.class, R.string.tracking);
+
+        View headerView = navigationView.getHeaderView(0);
+        TextView navUsername = (TextView) headerView.findViewById(R.id.lblNameUser);
+        navUsername.setText(sharedPreferences.getString(SharedPreferenceUtil.Key.nameUser));
+
+        ImageView imageUser  = (ImageView) headerView.findViewById(R.id.imageView);
+    }
+
+    public void showToolbar(){
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(R.string.app_name);
     }
 
     @Override
@@ -67,38 +101,55 @@ public class NavigationActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.close_session) {
+            closeSession();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    private void closeSession() {
+        sharedPreferences.put(SharedPreferenceUtil.Key.bLogin, false);
+        sharedPreferences.put(SharedPreferenceUtil.Key.idUser, null);
+        sharedPreferences.put(SharedPreferenceUtil.Key.idVehicle, null);
+        sharedPreferences.put(SharedPreferenceUtil.Key.nameUser, null);
+        sharedPreferences.put(SharedPreferenceUtil.Key.platesVehicle, null);
+        redirect(VideoActivity.class, true);
+    }
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        Fragment fragment = null;
-        Class fragmentClass = null;
+
+        item.setChecked(true);
 
         switch(item.getItemId()) {
             case R.id.nav_tracking:
-                fragmentClass = TrackingFragment.class;
+                setFrame(TrackingFragment.class, R.string.tracking);
                 break;
             case R.id.nav_profiler:
-                fragmentClass = ProfilerFragment.class;
+                setFrame(ProfilerFragment.class, R.string.profiler);
                 break;
             case R.id.nav_vehicle:
-                fragmentClass = VehicleFragment.class;
+                setFrame(VehicleFragment.class, R.string.vehicle);
                 break;
             case R.id.nav_report:
-                fragmentClass = ReportFragment.class;
+                setFrame(ReportFragment.class, R.string.reports);
                 break;
             case R.id.nav_suggestion:
-                fragmentClass = SuggestionFragment.class;
+                setFrame(SuggestionFragment.class, R.string.suggestions);
                 break;
 
             default:
-                fragmentClass = TrackingFragment.class;
+                setFrame(TrackingFragment.class, R.string.tracking);
         }
+
+        return true;
+    }
+
+    public void setFrame(Class FragmentCls, int iTitle) {
+        Fragment fragment = null;
+        Class fragmentClass = FragmentCls;
 
         try {
             fragment = (Fragment) fragmentClass.newInstance();
@@ -109,15 +160,10 @@ public class NavigationActivity extends AppCompatActivity
         // Insert the fragment by replacing any existing fragment
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-
-        item.setChecked(true);
-        setTitle(item.getTitle());
-
-
+        getSupportActionBar().setTitle(iTitle);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
-        return true;
     }
 
 

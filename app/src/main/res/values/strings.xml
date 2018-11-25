@@ -18,6 +18,34 @@
     <string name="incidents">Incidencias:</string>
     <string name="emergency">Emergencia</string>
 
+    <string name="back">Regresar</string>
+
+    <string name="incidents_speed">Aceleración:</string>
+    <string name="incidents_braking">Frenado:</string>
+    <string name="incidents_sustained_speed">Velocidad sostenida:</string>
+    <string name="incidents_fatigue">Adminitración de la fatiga:</string>
+    <string name="incidents_emergency">Emergencia:</string>
+
+    <string name="incidents_value_init">0%</string>
+
+    <string name="profiler_role">Tipo de usuario:</string>
+    <string name="profiler_name">Nombre:</string>
+    <string name="profiler_email">Correo:</string>
+    <string name="profiler_phone">Teléfono:</string>
+    <string name="profiler_employee_number">Número de empleado:</string>
+    <string name="profiler_boss">Jefe directo:</string>
+    <string name="profiler_boss_email">Correo jefe:</string>
+    <string name="profiler_zone">Zona:</string>
+    <string name="profiler_location">Localidad:</string>
+
+    <string name="vehicle_plates">Placas:</string>
+    <string name="vehicle_model">Modelo:</string>
+    <string name="vehicle_responsible">Responsable:</string>
+    <string name="vehicle_responsible_email">Email del Responsable:</string>
+    <string name="vehicle_type_vechile">Tipo de vehículo:</string>
+    <string name="vehicle_zone">Zona:</string>
+    <string name="vehicle_location">Localidad:</string>
+
     <string name="title">Ingrese su titulo</string>
 
     <string name="start_tracking">Iniciar Rastreo</string>
@@ -30,6 +58,8 @@
     <string name="suggestions">Sugerencias</string>
     <string name="close">Cerrar sesión</string>
     <string name="options">Opciones</string>
+    <string name="edit">Editar Perfil</string>
+    <string name="change_password">Cambiar contraseña</string>
 
     <string name="email">Email</string>
     <string name="editing">Editar</string>
@@ -45,6 +75,9 @@
     <string name="emailUser">Correo</string>
     <string name="phoneUser">Teléfono</string>
     <string name="employeeNumberUser">Número de usuario</string>
+
+    <string name="error_user_name">Por favor ingrese usuario.</string>
+    <string name="error_user_password">Por favor ingrese contraseña.</string>
 
 
     <string name="title_activity_navigation">NavigationActivity</string>

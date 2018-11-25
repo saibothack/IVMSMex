@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content">
 
                 <ImageView
-                    android:id="@+id/imageView3"
+                    android:id="@+id/imgProfiler"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
                     android:layout_alignParentStart="true"
@@ -35,7 +35,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_marginStart="97dp"
                     android:layout_marginEnd="97dp"
-                    android:src="@drawable/logo" />
+                    android:src="@drawable/ic_user" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -51,7 +51,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
+                    <EditText
                     android:id="@+id/txtName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -135,24 +135,46 @@
                     android:layout_height="5dp" />
             </RelativeLayout>
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="10dp">
+                android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/button"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
-                    android:text="@string/editing"
-                    android:textAllCaps="false"
-                    android:textStyle="bold"
-                    style="@style/Widget.AppCompat.Button.Colored"/>
-            </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <Button
+                        android:id="@+id/btnBack"
+                        style="@style/Widget.AppCompat.Button.Colored"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:text="@string/back"
+                        android:textAllCaps="false"
+                        android:textColor="@android:color/white"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <Button
+                        android:id="@+id/btnEdit"
+                        style="@style/Widget.AppCompat.Button.Colored"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:text="@string/editing"
+                        android:textAllCaps="false"
+                        android:textColor="@android:color/white"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                </RelativeLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
     </RelativeLayout>
