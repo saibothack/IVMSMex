@@ -75,6 +75,8 @@ public class TrackingFragment extends Fragment {
         });
 
         lblTxtPlates.setText(sharedPreferences.getString(SharedPreferenceUtil.Key.platesVehicle));
+
+        ForegroundLocation.setUpdateListener(this);
     }
 
     private void initTracking() {
@@ -98,6 +100,7 @@ public class TrackingFragment extends Fragment {
     }
 
     public void updateUI(String sAddress, String sSpeed, String sTime)  {
+        btnTracking.setText(R.string.stop_tracking);
         lblTxtAddress.setText(sAddress);
         lblTxtSpeed.setText(sSpeed);
         lblTxtTime.setText(sTime);
