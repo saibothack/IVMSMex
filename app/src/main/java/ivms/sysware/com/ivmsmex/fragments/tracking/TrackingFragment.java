@@ -1,5 +1,6 @@
 package ivms.sysware.com.ivmsmex.fragments.tracking;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,6 +11,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import ivms.sysware.com.ivmsmex.R;
 import ivms.sysware.com.ivmsmex.activities.navigation.NavigationActivity;
+import ivms.sysware.com.ivmsmex.services.ForegroundLocation;
+import ivms.sysware.com.ivmsmex.utils.Constants;
 import ivms.sysware.com.ivmsmex.utils.SharedPreferenceUtil;
 
 
@@ -58,8 +61,7 @@ public class TrackingFragment extends Fragment {
         btnTracking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(),
-                        "Toast por defecto", Toast.LENGTH_SHORT).show();
+                initTracking();
             }
         });
 
@@ -73,6 +75,36 @@ public class TrackingFragment extends Fragment {
         });
 
         lblTxtPlates.setText(sharedPreferences.getString(SharedPreferenceUtil.Key.platesVehicle));
-
     }
+
+    private void initTracking() {
+        switch (btnTracking.getText().toString()) {
+            case "Iniciar Rastreo":
+                btnTracking.setText(R.string.stop_tracking);
+                Intent startIntent = new Intent(navigationActivity, ForegroundLocation.class);
+                startIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
+                navigationActivity.startService(startIntent);
+                break;
+            case "Detener Rastreo":
+                btnTracking.setText(R.string.start_tracking);
+                Intent stopIntent = new Intent(navigationActivity, ForegroundLocation.class);
+                stopIntent.setAction(Constants.ACTION.STOPFOREGROUND_ACTION);
+                navigationActivity.startService(stopIntent);
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    public void updateUI(String sAddress, String sSpeed, String sTime)  {
+        lblTxtAddress.setText(sAddress);
+        lblTxtSpeed.setText(sSpeed);
+        lblTxtTime.setText(sTime);
+    }
+
+    public void updateIncidentsUI(String sIncidents)  {
+        lblTxtIncidents.setText(sIncidents);
+    }
+
 }

@@ -51,6 +51,8 @@
     <string name="start_tracking">Iniciar Rastreo</string>
     <string name="stop_tracking">Detener Rastreo</string>
 
+    <string name="in_tracking">En rastreo</string>
+
     <string name="tracking">Rastreo</string>
     <string name="profiler">Perfil</string>
     <string name="vehicle">Vehículo</string>
