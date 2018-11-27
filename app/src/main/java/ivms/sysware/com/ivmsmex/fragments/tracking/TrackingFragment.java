@@ -1,12 +1,16 @@
 package ivms.sysware.com.ivmsmex.fragments.tracking;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,6 +22,7 @@ import ivms.sysware.com.ivmsmex.utils.SharedPreferenceUtil;
 
 
 public class TrackingFragment extends Fragment {
+    static final int REQUEST_IMAGE_CAPTURE = 1;
     private SharedPreferenceUtil sharedPreferences;
 
     NavigationActivity navigationActivity;
@@ -120,7 +125,30 @@ public class TrackingFragment extends Fragment {
     }
 
     public void delay() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(navigationActivity);
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View v = inflater.inflate(R.layout.fragment_delay, null);
+        builder.setView(v);
 
+        final EditText txtDelay = v.findViewById(R.id.txtDelay);
+        Button btnContinue = v.findViewById(R.id.btnContinue);
+
+        final AlertDialog alertNotification = builder.create();
+
+        btnContinue.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (txtDelay.getText().toString().isEmpty()) {
+                            txtDelay.setError("Por favor ingrese su motivo del retraso");
+                        } else {
+                            alertNotification.dismiss();
+                        }
+                    }
+                }
+        );
+
+        alertNotification.show();
     }
 
     public void arrival() {
@@ -135,8 +163,38 @@ public class TrackingFragment extends Fragment {
     }
 
     public void delivery() {
-        lyDelivery.setVisibility(View.GONE);
-        lyHomecoming.setVisibility(View.VISIBLE);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(navigationActivity);
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View v = inflater.inflate(R.layout.fragment_delivery, null);
+        builder.setView(v);
+
+        final EditText txtDelay = v.findViewById(R.id.txtDelay);
+        Button btnContinue = v.findViewById(R.id.btnContinue);
+        Button btnEvidence = v.findViewById(R.id.btnEvidence);
+        final AlertDialog alertNotification = builder.create();
+
+        btnContinue.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        lyDelivery.setVisibility(View.GONE);
+                        lyHomecoming.setVisibility(View.VISIBLE);
+                        alertNotification.dismiss();
+                    }
+                }
+        );
+
+        btnEvidence.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dispatchTakePictureIntent();
+                    }
+                }
+        );
+
+        alertNotification.show();
+
     }
 
     public void homecoming() {
@@ -145,15 +203,40 @@ public class TrackingFragment extends Fragment {
     }
 
     private void initTracking() {
-        lyTracking.setVisibility(View.GONE);
 
-        lyDelay.setVisibility(View.VISIBLE);
-        lyArrival.setVisibility(View.VISIBLE);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(navigationActivity);
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View v = inflater.inflate(R.layout.fragment_remission, null);
+        builder.setView(v);
 
-        btnTracking.setText(R.string.stop_tracking);
-        Intent startIntent = new Intent(navigationActivity, ForegroundLocation.class);
-        startIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
-        navigationActivity.startService(startIntent);
+
+        final EditText txtRemision = v.findViewById(R.id.txtRemision);
+        Button btnContinue = v.findViewById(R.id.btnContinue);
+
+        final AlertDialog alertNotification = builder.create();
+
+        btnContinue.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (txtRemision.getText().toString().isEmpty()) {
+                            txtRemision.setError("Por favor ingrese su número de remisión");
+                        } else {
+                            lyTracking.setVisibility(View.GONE);
+                            lyDelay.setVisibility(View.VISIBLE);
+                            lyArrival.setVisibility(View.VISIBLE);
+
+                            btnTracking.setText(R.string.stop_tracking);
+                            Intent startIntent = new Intent(navigationActivity, ForegroundLocation.class);
+                            startIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
+                            navigationActivity.startService(startIntent);
+                            alertNotification.dismiss();
+                        }
+                    }
+                }
+        );
+
+        alertNotification.show();
     }
 
     public void updateUI(String sAddress, String sSpeed, String sTime)  {
@@ -167,4 +250,10 @@ public class TrackingFragment extends Fragment {
         lblTxtIncidents.setText(sIncidents);
     }
 
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(navigationActivity.getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
 }
