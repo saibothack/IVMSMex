@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import ivms.sysware.com.ivmsmex.R;
@@ -27,7 +28,16 @@ public class TrackingFragment extends Fragment {
     TextView lblTxtIncidents;
 
     Button btnTracking;
-    Button btnEmergency;
+    Button btnDelay;
+    Button btnArrival;
+    Button btnDelivery;
+    Button btnHomecoming;
+
+    RelativeLayout lyDelay;
+    RelativeLayout lyArrival;
+    RelativeLayout lyDelivery;
+    RelativeLayout lyTracking;
+    RelativeLayout lyHomecoming;
 
     public TrackingFragment() {
         // Required empty public constructor
@@ -57,7 +67,18 @@ public class TrackingFragment extends Fragment {
         lblTxtTime = frm.findViewById(R.id.lblTxtTime);
         lblTxtIncidents = frm.findViewById(R.id.lblTxtIncidents);
 
+        lyDelay = frm.findViewById(R.id.lyDelay);
+        lyArrival = frm.findViewById(R.id.lyArrival);
+        lyDelivery = frm.findViewById(R.id.lyDelivery);
+        lyTracking = frm.findViewById(R.id.lyTracking);
+        lyHomecoming = frm.findViewById(R.id.lyHomecoming);
+
         btnTracking = frm.findViewById(R.id.btnTracking);
+        btnDelay = frm.findViewById(R.id.btnDelay);
+        btnArrival = frm.findViewById(R.id.btnArrival);
+        btnDelivery = frm.findViewById(R.id.btnDelivery);
+        btnHomecoming = frm.findViewById(R.id.btnHomecoming);
+
         btnTracking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,12 +86,31 @@ public class TrackingFragment extends Fragment {
             }
         });
 
-        btnEmergency = frm.findViewById(R.id.btnEmergency);
-        btnEmergency.setOnClickListener(new View.OnClickListener() {
+        btnDelay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(),
-                        "Toast por defecto", Toast.LENGTH_SHORT).show();
+                delay();
+            }
+        });
+
+        btnArrival.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                arrival();
+            }
+        });
+
+        btnDelivery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                delivery();
+            }
+        });
+
+        btnHomecoming.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                homecoming();
             }
         });
 
@@ -79,24 +119,41 @@ public class TrackingFragment extends Fragment {
         ForegroundLocation.setUpdateListener(this);
     }
 
-    private void initTracking() {
-        switch (btnTracking.getText().toString()) {
-            case "Iniciar Rastreo":
-                btnTracking.setText(R.string.stop_tracking);
-                Intent startIntent = new Intent(navigationActivity, ForegroundLocation.class);
-                startIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
-                navigationActivity.startService(startIntent);
-                break;
-            case "Detener Rastreo":
-                btnTracking.setText(R.string.start_tracking);
-                Intent stopIntent = new Intent(navigationActivity, ForegroundLocation.class);
-                stopIntent.setAction(Constants.ACTION.STOPFOREGROUND_ACTION);
-                navigationActivity.startService(stopIntent);
-                break;
+    public void delay() {
 
-            default:
-                break;
-        }
+    }
+
+    public void arrival() {
+        lyDelay.setVisibility(View.GONE);
+        lyArrival.setVisibility(View.GONE);
+        lyDelivery.setVisibility(View.VISIBLE);
+
+        btnTracking.setText(R.string.start_tracking);
+        Intent stopIntent = new Intent(navigationActivity, ForegroundLocation.class);
+        stopIntent.setAction(Constants.ACTION.STOPFOREGROUND_ACTION);
+        navigationActivity.startService(stopIntent);
+    }
+
+    public void delivery() {
+        lyDelivery.setVisibility(View.GONE);
+        lyHomecoming.setVisibility(View.VISIBLE);
+    }
+
+    public void homecoming() {
+        lyHomecoming.setVisibility(View.GONE);
+        lyTracking.setVisibility(View.VISIBLE);
+    }
+
+    private void initTracking() {
+        lyTracking.setVisibility(View.GONE);
+
+        lyDelay.setVisibility(View.VISIBLE);
+        lyArrival.setVisibility(View.VISIBLE);
+
+        btnTracking.setText(R.string.stop_tracking);
+        Intent startIntent = new Intent(navigationActivity, ForegroundLocation.class);
+        startIntent.setAction(Constants.ACTION.STARTFOREGROUND_ACTION);
+        navigationActivity.startService(startIntent);
     }
 
     public void updateUI(String sAddress, String sSpeed, String sTime)  {

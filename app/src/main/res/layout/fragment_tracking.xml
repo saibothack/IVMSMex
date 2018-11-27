@@ -199,7 +199,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -297,6 +298,7 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/lyTracking"
                 android:layout_width="match_parent"
                 android:layout_height="50dp">
 
@@ -314,11 +316,13 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/lyDelay"
                 android:layout_width="match_parent"
-                android:layout_height="50dp">
+                android:layout_height="50dp"
+                android:visibility="gone">
 
                 <Button
-                    android:id="@+id/btnEmergency"
+                    android:id="@+id/btnDelay"
                     style="@style/Widget.AppCompat.Button.Colored"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -326,7 +330,64 @@
                     android:layout_alignParentTop="true"
                     android:layout_marginStart="0dp"
                     android:layout_marginTop="0dp"
-                    android:text="@string/emergency"
+                    android:text="@string/traking_delay"
+                    android:textAllCaps="false" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/lyArrival"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:visibility="gone">
+
+                <Button
+                    android:id="@+id/btnArrival"
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="0dp"
+                    android:text="@string/traking_arrival"
+                    android:textAllCaps="false" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/lyDelivery"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:visibility="gone">
+
+                <Button
+                    android:id="@+id/btnDelivery"
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="0dp"
+                    android:text="@string/traking_delivery"
+                    android:textAllCaps="false" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/lyHomecoming"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:visibility="gone">
+
+                <Button
+                    android:id="@+id/btnHomecoming"
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="0dp"
+                    android:text="@string/traking_homecoming"
                     android:textAllCaps="false" />
             </RelativeLayout>
 
