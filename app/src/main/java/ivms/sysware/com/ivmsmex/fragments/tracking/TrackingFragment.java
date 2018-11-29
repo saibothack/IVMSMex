@@ -1,12 +1,16 @@
 package ivms.sysware.com.ivmsmex.fragments.tracking;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -22,6 +26,8 @@ import ivms.sysware.com.ivmsmex.utils.SharedPreferenceUtil;
 
 
 public class TrackingFragment extends Fragment {
+    private int corx, cory;
+    private Lienzo fondo;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     private SharedPreferenceUtil sharedPreferences;
 
@@ -177,9 +183,8 @@ public class TrackingFragment extends Fragment {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        lyDelivery.setVisibility(View.GONE);
-                        lyHomecoming.setVisibility(View.VISIBLE);
                         alertNotification.dismiss();
+                        setSignature();
                     }
                 }
         );
@@ -195,6 +200,44 @@ public class TrackingFragment extends Fragment {
 
         alertNotification.show();
 
+    }
+
+    public void setSignature() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(navigationActivity);
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View v = inflater.inflate(R.layout.fragment_signature, null);
+        builder.setView(v);
+
+        Button btnClear = v.findViewById(R.id.btnClear);
+        Button btnContinue = v.findViewById(R.id.btnContinue);
+
+        corx = 100;
+        cory = 100;
+        RelativeLayout layout1 = (RelativeLayout) v.findViewById(R.id.lySignature);
+
+
+        final AlertDialog alertNotification = builder.create();
+
+        btnContinue.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        lyDelivery.setVisibility(View.GONE);
+                        lyHomecoming.setVisibility(View.VISIBLE);
+                        alertNotification.dismiss();
+                    }
+                }
+        );
+
+        btnClear.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                    }
+                }
+        );
+
+        alertNotification.show();
     }
 
     public void homecoming() {
@@ -254,6 +297,28 @@ public class TrackingFragment extends Fragment {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(navigationActivity.getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
+    public boolean onTouch(View v, MotionEvent event) {
+        corx = (int) event.getX();
+        cory = (int) event.getY();
+        fondo.invalidate();
+        return true;
+    }
+    class Lienzo extends View {
+
+        public Lienzo(Context context) {
+            super(context);
+        }
+
+        protected void onDraw(Canvas canvas) {
+            canvas.drawRGB(255, 255, 0);
+            Paint pincel1 = new Paint();
+            pincel1.setARGB(255, 255, 0, 0);
+            pincel1.setStrokeWidth(4);
+            pincel1.setStyle(Paint.Style.STROKE);
+            canvas.drawCircle(corx, cory, 20, pincel1);
         }
     }
 }

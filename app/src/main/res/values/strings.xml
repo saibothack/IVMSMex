@@ -58,6 +58,10 @@
     <string name="vehicle_zone">Zona:</string>
     <string name="vehicle_location">Localidad:</string>
 
+    <string name="signature">Por favor firme dentro del contorno</string>
+
+    <string name="clean">Limpiar</string>
+
     <string name="title">Ingrese su titulo</string>
 
     <string name="start_tracking">Inicio de viaje</string>
