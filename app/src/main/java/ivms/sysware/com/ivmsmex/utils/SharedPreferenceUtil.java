@@ -13,7 +13,7 @@ public class SharedPreferenceUtil {
 
     private SharedPreferenceUtil(Context context) {
         if (context != null) {
-            mPrefs = MyApplication.getAppContext().getSharedPreferences(SETTINGS_NAME, Context.MODE_PRIVATE);
+            mPrefs = ivmsApplication.getAppContext().getSharedPreferences(SETTINGS_NAME, Context.MODE_PRIVATE);
             mEditor = mPrefs.edit();
         }
     }
@@ -26,6 +26,7 @@ public class SharedPreferenceUtil {
     }
 
     public enum Key {
+        USER_DATA,
         idUser,
         idVehicle,
         nameUser,

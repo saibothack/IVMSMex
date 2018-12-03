@@ -11,7 +11,12 @@ import ivms.sysware.com.ivmsmex.activities.navigation.NavigationActivity;
 import ivms.sysware.com.ivmsmex.R;
 import ivms.sysware.com.ivmsmex.activities.BaseActivity;
 import ivms.sysware.com.ivmsmex.activities.rememberPassword.RememberPasswordActivity;
+import ivms.sysware.com.ivmsmex.services.security.LoginService;
+import ivms.sysware.com.ivmsmex.services.security.User;
 import ivms.sysware.com.ivmsmex.utils.SharedPreferenceUtil;
+import ivms.sysware.com.ivmsmex.utils.delegates.loginListener;
+import ivms.sysware.com.ivmsmex.utils.delegates.networkingListener;
+import ivms.sysware.com.ivmsmex.utils.enums;
 
 public class LoginActivity extends BaseActivity {
     private SharedPreferenceUtil sharedPreferences;
@@ -22,12 +27,54 @@ public class LoginActivity extends BaseActivity {
     @BindView(R.id.txtPassword)
     EditText txtPassword;
 
+    private loginListener listener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+        initEvents();
         initComponents();
+    }
+
+    @Override
+    public void initEvents(){
+        LoginService.setExternalNetworkListener(new networkingListener() {
+            @Override
+            public void onLoaded() {
+                closeLoading();
+            }
+
+            @Override
+            public void onError(String messageError) {
+                message("Inicio de Sesión", messageError, enums.MessageType.DANGER);
+            }
+
+            @Override
+            public void onLoading(String loadingMessage) {
+                loading(loadingMessage);
+            }
+        });
+
+        listener=new loginListener() {
+            @Override
+            public void onSuccesLogin(User user) {
+                LoginService.removeEventListener(listener);
+                sharedPreferences.put(SharedPreferenceUtil.Key.bLogin, true);
+                sharedPreferences.put(SharedPreferenceUtil.Key.idUser, user.getUserId());
+                sharedPreferences.put(SharedPreferenceUtil.Key.idVehicle, user.getVehicle().get(0).getVehicleId());
+                sharedPreferences.put(SharedPreferenceUtil.Key.nameUser, user.getNameUser());
+                sharedPreferences.put(SharedPreferenceUtil.Key.platesVehicle, user.getVehicle().get(0).getVehiclePlates());
+                redirect(NavigationActivity.class, true);
+            }
+
+            @Override
+            public void onLoginFailed(String errorMessage) {
+                message("Inicio de Sesión", errorMessage, enums.MessageType.DANGER);
+            }
+        };
+        LoginService.addEventListener(listener);
     }
 
     @Override
@@ -39,12 +86,13 @@ public class LoginActivity extends BaseActivity {
     void onLoginClick(View view){
 
         if (validate()) {
-            sharedPreferences.put(SharedPreferenceUtil.Key.bLogin, true);
-            sharedPreferences.put(SharedPreferenceUtil.Key.idUser, 1);
-            sharedPreferences.put(SharedPreferenceUtil.Key.idVehicle, 1);
-            sharedPreferences.put(SharedPreferenceUtil.Key.nameUser, "Gad Arenas");
-            sharedPreferences.put(SharedPreferenceUtil.Key.platesVehicle, "MAF8899");
-            redirect(NavigationActivity.class, true);
+            String username=txtEmail.getText().toString();
+            String password=txtPassword.getText().toString();
+            LoginService.doProcessLogin(username, password);
+
+
+
+
         }
 
     }
