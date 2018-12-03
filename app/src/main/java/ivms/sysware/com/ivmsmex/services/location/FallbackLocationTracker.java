@@ -100,13 +100,16 @@ public class FallbackLocationTracker  implements LocationTracker, LocationTracke
             double lastGPSPointX = oldLoc.getLongitude();
             double currentGPSPointY = newLoc.getLatitude();
             double lastGPSPointY = oldLoc.getLatitude();
-            double time_between = (newLoc.getTime() - oldLoc.getTime())/1000;
+
+           // speed = newLoc.getSpeed()*3.6;
+            /*double time_between = (newLoc.getTime() - oldLoc.getTime())/1000;
             speed = newLoc.distanceTo(oldLoc) / time_between;
-            speed=speed*3.6;//se convierte de metros a kilometros
+            */
+           // speed=speed*3.6;//se convierte de metros a kilometros
+
             // (((sqrt(Math.pow((currentGPSPointX - lastGPSPointX), 2)) + Math.pow((currentGPSPointY - lastGPSPointY), 2))) / (time_between)) * 1.09728; //conversion a kilometros por hora
-            speed+=(speed*(36/100));//se le agrega el 3.6% mencionado por Gad
         }
-        newLoc.setSpeed(speed.floatValue());
+        ///newLoc.setSpeed(speed.floatValue());
 
         if(update){
             if(listener != null){

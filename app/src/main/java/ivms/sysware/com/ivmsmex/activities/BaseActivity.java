@@ -1,21 +1,28 @@
 package ivms.sysware.com.ivmsmex.activities;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 
 import ivms.sysware.com.ivmsmex.R;
+import ivms.sysware.com.ivmsmex.dialogs.dialogLoading;
 import ivms.sysware.com.ivmsmex.utils.MyApplication;
 import ivms.sysware.com.ivmsmex.utils.enums;
+import ivms.sysware.com.ivmsmex.utils.ivmsApplication;
 
 public class BaseActivity extends AppCompatActivity {
+    private dialogLoading progress;
+
+
+
     public BaseActivity() {
         super();
     }
 
 
-    public void initComponents(){
+    public void initComponents() {
 
     }
 
@@ -23,8 +30,8 @@ public class BaseActivity extends AppCompatActivity {
 
     }
 
-    public MyApplication getMyApplication() {
-        return (MyApplication) getApplication();
+    public ivmsApplication getMyApplication() {
+        return (ivmsApplication) getApplication();
     }
 
     @Override
@@ -47,6 +54,8 @@ public class BaseActivity extends AppCompatActivity {
     public void messageOptions(String titulo, String msj, enums.MessageType type, final Class view, final Runnable onAccept, final Runnable onCancel, Boolean muestraBotonCancelar, String labelAceptar, String labelCancelar){
         messageOptions(titulo, msj, type, view, onAccept, onCancel, muestraBotonCancelar, labelAceptar, labelCancelar, null, null);
     }
+
+
     public void messageOptions(String titulo, String msj, enums.MessageType type, final Class view, final Runnable onAccept, final Runnable onCancel, Boolean muestraBotonCancelar, String labelAceptar, String labelCancelar, final CharSequence[] items, DialogInterface.OnClickListener clickListener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
@@ -66,7 +75,6 @@ public class BaseActivity extends AppCompatActivity {
         }else{
             builder.setIcon(R.mipmap.info);
         }
-
         //"Aceptar"
         builder.setPositiveButton(labelAceptar, new DialogInterface.OnClickListener() {
             @Override
@@ -79,7 +87,6 @@ public class BaseActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
-
         Boolean mostrarBotonCancelar=muestraBotonCancelar;
 
         if (mostrarBotonCancelar) {
@@ -97,6 +104,7 @@ public class BaseActivity extends AppCompatActivity {
         }
 
 
+
         builder.show();
     }
 
@@ -105,6 +113,26 @@ public class BaseActivity extends AppCompatActivity {
         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i);
     }
+
+    public void loading(final String message) {
+        if (progress == null) {
+            {
+                progress = new dialogLoading(this);
+                progress.setMessage(message);
+                progress.show();
+            }
+        }
+    }
+
+
+    public void closeLoading() {
+        if (progress != null) {
+            progress.dismiss();
+            progress = null;
+        }
+    }
+
+
 
     public void redirect(final Class clazz, boolean finish) {
         Intent i = new Intent(this, clazz);
